@@ -15,7 +15,7 @@ const createNewTask = async (req, res) => {
     try {
         const task = await Task.create(req.body)
         res.status(201).json({task})
-        console.log(req.body);        
+        // console.log(req.body);        
     } catch (error) {
         res.status(500).json({msg: error})
     }
@@ -37,14 +37,14 @@ const getSingleTask = async (req, res) => {
 
 }
 
-const updateSingleTask = (req, res) => {
-    res.send('update/change an existing task')
-}
+
 
 const deleteSingleTask = async (req, res) => {
     try {
         const {id: taskID} = req.params
         const task = await Task.deleteOne({_id: taskID})
+        // const task = await Task.findOneAndDelete({_id: taskID})
+
     
         if (!task) {
             return res.status(404).json({msg: `no task with the id of ${taskID} found in the database` })
@@ -53,6 +53,22 @@ const deleteSingleTask = async (req, res) => {
         
     } catch (error) {
         res.status(500).json({msg: error})
+    }
+}
+
+const updateSingleTask = async (req, res) => {
+    try {
+        const {id: taskID} = req.params
+        const task = await Task.findOneAndUpdate({_id: taskID}, req.body, {new: true, runValidators: true})
+
+        if (!task) {
+            return res.status(404).json({msg: `no task with the id of ${taskID} found in the database` })
+        }
+        res.status(200).json({task: task})    
+        
+    } catch (error) {
+        res.status(500).json({msg: error})
+
     }
 }
 
