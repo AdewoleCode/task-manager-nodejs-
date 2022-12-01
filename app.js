@@ -12,12 +12,8 @@ require('dotenv').config()
 //cos we are sending json from our app and we will need to access the data, we need to use the middleware to set it to json
 //so that we'll have access to the data in req.body
 app.use(express.json())
+app.use(express.static('./public'))
 
-
-app.get('/hello', (req, res) => {
-    res.send('task manager');
-
-})
 
 app.use('/api/v1/tasks', taskRouter)
 
